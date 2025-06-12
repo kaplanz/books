@@ -40,7 +40,7 @@ api.get("/", async (c) => {
                 { last_read_date: asc },
               ]
             ) {
-              book {
+              edition {
                 id
                 title
                 contributions {
@@ -60,7 +60,7 @@ api.get("/", async (c) => {
     })
       .then(r => r.json())
       .then(({ data }) => data.me[0].user_books.map((item: any) => ({
-        book: item.book,
+        book: item.edition,
         date: new Date(item.last_read_date),
       })))
   )
