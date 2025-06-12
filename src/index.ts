@@ -54,7 +54,7 @@ async function upstream(kind: Kind): Promise<JSON> {
                 status_id: {_eq: ${kind}}
               }
               order_by: [
-                { ${date}: asc },
+                { ${date}: desc },
               ]
             ) {
               edition {
