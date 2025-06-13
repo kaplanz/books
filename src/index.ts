@@ -39,6 +39,7 @@ enum Kind {
 }
 
 async function upstream(kind: Kind): Promise<JSON> {
+  let date = kind == Kind.Read ? "last_read_date" : "date_added";
   return fetch("https://api.hardcover.app/v1/graphql", {
     headers: {
       "content-type": "application/json",
@@ -53,7 +54,7 @@ async function upstream(kind: Kind): Promise<JSON> {
                 status_id: {_eq: ${kind}}
               }
               order_by: [
-                { last_read_date: asc },
+                { ${date}: asc },
               ]
             ) {
               edition {
@@ -68,7 +69,7 @@ async function upstream(kind: Kind): Promise<JSON> {
                   url
                 }
               }
-              last_read_date
+              ${date}
             }
           }
         }`
@@ -77,7 +78,7 @@ async function upstream(kind: Kind): Promise<JSON> {
     .then(r => r.json())
     .then(({ data }) => data.me[0].user_books.map((item: any) => ({
       book: item.edition,
-      date: new Date(item.last_read_date),
+      date: new Date(item[date]),
     })))
 }
 
