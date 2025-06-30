@@ -52,6 +52,7 @@ async function upstream(kind: Kind): Promise<JSON> {
             user_books(
               where: {
                 status_id: {_eq: ${kind}}
+                privacy_setting_id: {_lt: 3}
               }
               order_by: [
                 { ${date}: desc },
