@@ -60,6 +60,7 @@ async function upstream(kind: Kind): Promise<JSON> {
             ) {
               edition {
                 id
+                isbn_13
                 title
                 contributions {
                   author {
@@ -70,6 +71,13 @@ async function upstream(kind: Kind): Promise<JSON> {
                   url
                 }
               }
+              user_book_reads(
+                order_by: {finished_at: desc}
+                limit: 1
+              ) {
+                started_at
+                finished_at
+              }
               ${date}
             }
           }
@@ -79,6 +87,7 @@ async function upstream(kind: Kind): Promise<JSON> {
     .then(r => r.json())
     .then(({ data }) => data.me[0].user_books.map((item: any) => ({
       book: item.edition,
+      read: item.user_book_reads,
       date: new Date(item[date]),
     })))
 }
